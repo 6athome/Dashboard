@@ -7,12 +7,9 @@ const COLORS = {
   past: '#94a3b8',
 };
 
-const dataStatus = document.getElementById('dataStatus');
-const excelUpload = document.getElementById('excelUpload');
-const counterEls = Object.fromEntries(
-  [...document.querySelectorAll('[data-counter-key]')].map((el) => [el.dataset.counterKey, el])
-);
-
+let dataStatus = null;
+let excelUpload = null;
+let counterEls = {};
 
 const headerMap = {
   id: ['id', '아이디', 'work item id', 'workitemid'],
@@ -103,9 +100,17 @@ const sampleRows = [
   },
 ];
 
-
 let allRows = sampleRows;
 let currentRows = sampleRows;
+
+// DOM 초기화는 DOMContentLoaded 후에 수행
+function initDOM() {
+  dataStatus = document.getElementById('dataStatus');
+  excelUpload = document.getElementById('excelUpload');
+  counterEls = Object.fromEntries(
+    [...document.querySelectorAll('[data-counter-key]')].map((el) => [el.dataset.counterKey, el])
+  );
+
 
 const timelineCtx = document.getElementById('timelineChart').getContext('2d');
 const statusCtx = document.getElementById('statusChart').getContext('2d');
