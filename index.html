@@ -18,7 +18,7 @@
         <a href="#">⚙ 설정</a>
       </nav>
     </aside>
-
+    
     <main class="main">
       <header class="topbar">
         <div>
@@ -31,67 +31,93 @@
             <button class="range" data-range="30">30일</button>
             <button class="range" data-range="90">90일</button>
           </div>
+          <label class="upload">
+            <input id="excelUpload" type="file" accept=".xlsx,.xls,.csv" />
+            Excel 업로드
+          </label>
           <button class="export">↓ 내보내기</button>
         </div>
       </header>
+      <p class="data-status" id="dataStatus">샘플 데이터가 로드되었습니다.</p>
 
+      
       <section class="kpis">
         <article class="kpi">
-          <span class="kpi__label">총 매출</span>
-          <strong class="kpi__value">₩<span data-counter="48720000">0</span></strong>
-          <span class="kpi__delta kpi__delta--up">▲ 12.4%</span>
+          <span class="kpi__label">총 Work Items</span>
+          <strong class="kpi__value"><span data-counter-key="totalWorkItems">0</span></strong>
+          <span class="kpi__delta kpi__delta--up">▲ 최근 현황</span>
         </article>
         <article class="kpi">
-          <span class="kpi__label">신규 사용자</span>
-          <strong class="kpi__value"><span data-counter="2841">0</span></strong>
-          <span class="kpi__delta kpi__delta--up">▲ 8.2%</span>
+          <span class="kpi__label">진행 중</span>
+          <strong class="kpi__value"><span data-counter-key="inProgress">0</span></strong>
+          <span class="kpi__delta kpi__delta--wait">▲ 진행중</span>
         </article>
         <article class="kpi">
-          <span class="kpi__label">활성 사용자</span>
-          <strong class="kpi__value"><span data-counter="14302">0</span></strong>
-          <span class="kpi__delta kpi__delta--down">▼ 2.1%</span>
+          <span class="kpi__label">완료</span>
+          <strong class="kpi__value"><span data-counter-key="completed">0</span></strong>
+          <span class="kpi__delta kpi__delta--ok">▲ 완료</span>
         </article>
-        <article class="kpi">
-          <span class="kpi__label">전환율</span>
-          <strong class="kpi__value"><span data-counter="3.8">0</span>%</strong>
-          <span class="kpi__delta kpi__delta--up">▲ 0.4pt</span>
+                <article class="kpi">
+          <span class="kpi__label">평균 소요시간</span>
+          <strong class="kpi__value"><span data-counter-key="averageDuration">0</span>h</strong>
+          <span class="kpi__delta kpi__delta--up">▲ 시간</span>
         </article>
       </section>
 
       <section class="grid">
         <div class="card card--wide">
           <header class="card__head">
-            <h3>매출 추이</h3>
-            <span class="legend"><i style="background:#6366f1"></i>이번 기간 <i style="background:#94a3b8"></i>지난 기간</span>
+            <h3>일정 관리</h3>
+            <span class="legend"><i style="background:#6366f1"></i>시작 건수 <i style="background:#94a3b8"></i>완료 건수</span>
           </header>
-          <div class="chart"><canvas id="lineChart"></canvas></div>
+          <div class="chart"><canvas id="timelineChart"></canvas></div>
+        </div>
+        
+        <div class="card">
+          <header class="card__head"><h3>상태별 Work Item</h3></header>
+          <div class="chart"><canvas id="statusChart"></canvas></div>
         </div>
 
         <div class="card">
-          <header class="card__head"><h3>채널별 매출</h3></header>
-          <div class="chart"><canvas id="doughnutChart"></canvas></div>
-        </div>
-
-        <div class="card">
-          <header class="card__head"><h3>요일별 주문</h3></header>
-          <div class="chart"><canvas id="barChart"></canvas></div>
+          <header class="card__head"><h3>담당자별 Work Item</h3></header>
+          <div class="chart"><canvas id="assigneeChart"></canvas></div>
         </div>
 
         <div class="card card--wide">
           <header class="card__head">
-            <h3>최근 주문</h3>
+            <h3>내용 분석 및 요약</h3>
+          </header>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <strong>주요 유형</strong>
+              <p id="topTypes">-</p>
+            </div>
+                      <div class="summary-item">
+              <strong>진행 현황</strong>
+              <p id="topStatuses">-</p>
+            </div>
+            <div class="summary-item">
+              <strong>주요 프로젝트</strong>
+              <p id="topProjects">-</p>
+            </div>
+            <div class="summary-item">
+              <strong>핵심 키워드</strong>
+              <p id="topKeywords">-</p>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="card card--wide">
+          <header class="card__head">
+            <h3>최근 Work Item</h3>
             <a href="#" class="link">전체 보기 →</a>
           </header>
           <table class="orders">
             <thead>
-              <tr><th>주문 번호</th><th>고객</th><th>상품</th><th>금액</th><th>상태</th></tr>
+              <tr><th>ID</th><th>제목</th><th>담당자</th><th>프로젝트</th><th>상태</th><th>완료일</th></tr>
             </thead>
-            <tbody>
-              <tr><td>#10248</td><td>김민준</td><td>Pro 플랜 (연간)</td><td>₩118,800</td><td><span class="badge badge--ok">완료</span></td></tr>
-              <tr><td>#10247</td><td>이지수</td><td>Team 5인 (월간)</td><td>₩49,500</td><td><span class="badge badge--ok">완료</span></td></tr>
-              <tr><td>#10246</td><td>박서연</td><td>Pro 플랜 (월간)</td><td>₩9,900</td><td><span class="badge badge--wait">대기</span></td></tr>
-              <tr><td>#10245</td><td>한유진</td><td>Enterprise (맞춤)</td><td>₩2,400,000</td><td><span class="badge badge--ok">완료</span></td></tr>
-              <tr><td>#10244</td><td>최도윤</td><td>Pro 플랜 (월간)</td><td>₩9,900</td><td><span class="badge badge--fail">실패</span></td></tr>
+            <tbody id="recentItemsBody">
+              <tr><td colspan="6">데이터를 업로드하면 최근 항목이 표시됩니다.</td></tr>
             </tbody>
           </table>
         </div>
@@ -100,6 +126,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.18.19/package/dist/xlsx.full.min.js"></script>
   <script src="script.js"></script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"c7ff09459b034bca86d316da146b68be","r":1}' crossorigin="anonymous"></script>
 </body>
